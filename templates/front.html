@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SABER Chatbot</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('/static/front bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333333;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-bar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            background-color: rgba(10, 0, 0, 0.8);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-bar img {
+        height: 216PX; /* Adjust this if needed */
+        width: 384px; /* Set a specific width for the logo */
+        margin-right: 15px;
+    }
+
+        .container {
+            text-align: center;
+            background-color: rgba(10, 0, 0, 0.85); /* Increased transparency */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            margin-top: 180px;
+            max-width: 600px;
+            width: 85%;
+            z-index: 2;
+        }
+
+        .content h2 {
+            color: #f8f6f6;
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 1.2px;
+            line-height: 1.3;
+        }
+
+        .content h2 .red-text {
+            color: #0044cc;
+            font-weight: bold;
+        }
+
+        .start-button {
+            background-color: #0044cc;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .start-button:hover {
+            background-color: #0033a0;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-button:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0044cc;
+        }
+
+        .start-button:active {
+            transform: translateY(2px);
+        }
+
+        .tagline {
+        color: #fcf8f8;
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-weight: 400;
+        letter-spacing: 1.1px;
+        line-height: 1.3;
+    }
+
+        @media screen and (max-width: 768px) {
+            .content h2 {
+                font-size: 32px;
+                letter-spacing: 1px;
+            }
+
+            .start-button {
+                font-size: 18px;
+                padding: 12px 24px;
+            }
+
+            .container {
+                margin-top: 150px;
+                padding: 30px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .content h2 {
+                font-size: 28px;
+            }
+
+            .start-button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="/static/saber new logo.png" alt="Somaiya Vidyavihar University Logo" aria-label="University Logo">
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h2>Welcome to the <span class="red-text">SABER</span> Chatbot</h2>
+            <!-- <p class="tagline">Your College Companion</p> Added tagline -->
+            <a href="/chatbot">
+                <button class="start-button" onclick="startChat()" aria-label="Start Chatbot">Start Now</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function startChat() {
+            // Functionality to start the chatbot
+        }
+    </script>
+</body>
+</html>

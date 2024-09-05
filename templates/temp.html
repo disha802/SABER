@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>somAIya College Chatbot</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Fira+Sans:wght@300;400;500;700&display=swap');
+
+body {
+    background: linear-gradient(to right, #b2ebf2, #e0f7fa); 
+    font-family: 'Fira Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.chat-container {
+    background: #ffffff;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: none;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.chat-header {
+    background-color: #ffffff;
+    color: #ED1C24; /* Vitality Red */
+    padding: 15px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: 'Marcellus', serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.6s ease-out;
+}
+
+.clear-button {
+    padding: 5px 15px;
+    background-color: #ED1C24; /* Vitality Red */
+    color: white;
+    border: 2px solid #ED1C24;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 700;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.clear-button:hover {
+    background-color: #b7202e; /* Power Red */
+}
+
+.clear-button:active {
+    background-color: #b71c1c;
+    transform: scale(0.98);
+}
+
+.typing-indicator {
+    display: none;
+    font-size: 14px;
+    color: #58595B; /* Pantone Cool Gray */
+    margin-top: 10px;
+    text-align: center;
+    animation: blink 1.2s linear infinite;
+}
+
+.chat-log {
+    flex: 1;
+    padding: 15px;
+    background-color: #f5f5f5; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.user-message, .bot-message {
+    padding: 12px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+    position: relative;
+    animation: popIn 0.6s ease-out;
+    transition: transform 0.3s ease;
+}
+
+.user-message {
+    background: #ffffff; 
+    color: #333; 
+    align-self: flex-end;
+    border: 1px solid #ddd; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 14px 18px; 
+    font-size: 18px; 
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.user-message:hover {
+    transform: scale(1.03);
+}
+
+.user-message::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #ffffff;
+    border-left: 10px solid transparent;
+    transform: translate(10%, 50%);
+}
+
+.bot-message {
+    background: #ED1C24; /* Vitality Red */
+    color: #ffffff; 
+    align-self: flex-start;
+    border: 1px solid #ED1C24; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    font-weight: 600; 
+    font-size: 18px; 
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.bot-message:hover {
+    transform: scale(1.03);
+}
+
+.bot-message::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #ED1C24;
+    border-right: 10px solid transparent;
+    transform: translate(-10%, 50%);
+}
+
+.input-container {
+    display: flex;
+    padding: 10px;
+    background-color: #ffffff; 
+    border-top: 1px solid #ddd;
+    align-items: center;
+    position: relative;
+    animation: slideUp 0.6s ease-out;
+}
+
+.input-container input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 20px;
+    outline: none;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa; 
+    color: #333; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input[type="text"]:focus {
+    border-color: #00796b;
+    box-shadow: inset 0 6px 10px rgba(0, 121, 107, 0.2);
+}
+
+.input-container button {
+    padding: 12px 20px;
+    background-color: #ED1C24; /* Vitality Red */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 700;
+    margin-left: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.input-container button:hover {
+    background-color: #b7202e; /* Power Red */
+}
+
+.input-container button:active {
+    background-color: #b71c1c;
+    transform: scale(0.98);
+}
+
+.options-container button {
+    display: block;
+    background: #ffffff;
+    color: #231F20; /* Pantone Dark Gray */
+    border: 1px solid #231F20;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 700;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.options-container button:hover {
+    background: #231F20;
+    color: #ffffff;
+}
+
+.branch-selection {
+    margin-top: 10px;
+}
+
+.branch-selection select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+    background-color: #fafafa;
+    color: #333;
+    width: 100%;
+    font-family: 'Fira Sans', sans-serif;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.branch-selection select:focus {
+    border-color: #00796b;
+    background-color: #e0f2f1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+    </style>
+    
+    
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            somAIya
+            <button class="clear-button" onclick="clearChat()">Clear Chat</button>
+        </div>
+        <div class="chat-log" id="chat-log">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <div class="typing-indicator" id="typing-indicator">somAIya is typing...</div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Ask something..." onkeydown="handleKeyDown(event)" disabled>
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedOption = null;
+    
+        function autoScroll() {
+            const chatLog = document.getElementById('chat-log');
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+    
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            const chatLog = document.getElementById('chat-log');
+            const typingIndicator = document.getElementById('typing-indicator');
+    
+            if (userInput.trim() === '') return;
+    
+            appendMessage('user', userInput);
+    
+            document.getElementById('user-input').value = '';
+            autoScroll(); // Ensure auto-scroll after user message
+    
+            typingIndicator.style.display = 'block';
+    
+            fetch('/get_response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput, option: selectedOption })
+            })
+            .then(response => response.json())
+            .then(data => {
+                typingIndicator.style.display = 'none';
+                appendMessage('bot', data.response);
+                autoScroll(); // Ensure auto-scroll after bot response
+    
+                if (data.response.toLowerCase().includes("goodbye") || data.response.toLowerCase().includes("bye")) {
+                    setTimeout(() => {
+                        alert("Thank you for chatting with somAIya! Have a great day!");
+                    }, 500);
+                }
+            });
+        }
+    
+        function appendMessage(sender, text) {
+            const chatLog = document.getElementById('chat-log');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = ${sender}-message;
+            messageDiv.textContent = text;
+            chatLog.appendChild(messageDiv);
+            autoScroll(); // Ensure auto-scroll after appending the message
+        }
+    
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+    
+        function clearChat() {
+            const chatLog = document.getElementById('chat-log');
+            chatLog.innerHTML = '';
+            displayOptions();
+        }
+    
+        function displayOptions() {
+            const chatLog = document.getElementById('chat-log');
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'bot-message';
+            optionsDiv.innerHTML = `
+                <div>Hello! I'm somAIya, your college chatbot. How can I assist you today?</div>
+                <div class="options-container">
+                    <button onclick="selectOption('First Year')">First Year</button>
+                    <button onclick="selectOption('Second Year')">Second Year</button>
+                    <button onclick="selectOption('Third Year')">Third Year</button>
+                    <button onclick="selectOption('Final Year')">Final Year</button>
+                </div>
+            `;
+            chatLog.appendChild(optionsDiv);
+            autoScroll(); // Ensure auto-scroll after displaying options
+        }
+    
+        function selectOption(option) {
+            selectedOption = option;
+            const chatLog = document.getElementById('chat-log');
+            const inputField = document.getElementById('user-input');
+            inputField.disabled = false;
+    
+            if (option === 'First Year') {
+                displayFirstYearBranchSelection();
+            } else if (option === 'Second Year') {
+                displaySecondYearBranchSelection();
+            } else {
+                appendMessage('bot', You selected "${option}". You can now ask questions related to this field.);
+            }
+            autoScroll(); // Ensure auto-scroll after selecting option
+        }
+    
+        function displayFirstYearBranchSelection() {
+            const chatLog = document.getElementById('chat-log');
+            const branchDiv = document.createElement('div');
+            branchDiv.className = 'bot-message';
+            branchDiv.innerHTML = `
+                <div class="branch-selection">
+                    <div>Please select your branch:</div>
+                    <select id="branch-dropdown" onchange="branchSelected()">
+                        <option value="">Select your branch</option>
+                        <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Computer & Communication Engineering">Computer & Communication Engineering</option>
+                        <option value="Computer Science & Business Systems">Computer Science & Business Systems</option>
+                        <option value="Electronics & Computer Engineering">Electronics & Computer Engineering</option>
+                        <option value="Electronics & Telecommunication Engineering">Electronics & Telecommunication Engineering</option>
+                        <option value="Electronics Engineering (VLSI Design & Technology)">Electronics Engineering (VLSI Design & Technology)</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Robotics & Artificial Intelligence">Robotics & Artificial Intelligence</option>
+                    </select>
+                </div>
+            `;
+            chatLog.appendChild(branchDiv);
+            autoScroll(); // Ensure auto-scroll after displaying branch selection
+        }
+    
+        function displaySecondYearBranchSelection() {
+            const chatLog = document.getElementById('chat-log');
+            const branchDiv = document.createElement('div');
+            branchDiv.className = 'bot-message';
+            branchDiv.innerHTML = `
+                <div class="branch-selection">
+                    <div>Please select your branch:</div>
+                    <select id="branch-dropdown" onchange="branchSelected()">
+                        <option value="">Select your branch</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Robotics & Artificial Intelligence">Robotics & Artificial Intelligence</option>
+                        <option value="Computer & Communication Engineering">Computer & Communication Engineering</option>
+                        <option value="Electronics & Telecommunication Engineering">Electronics & Telecommunication Engineering</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Electronics Engineering (VLSI Design & Technology)">Electronics Engineering (VLSI Design & Technology)</option>
+                    </select>
+                </div>
+            `;
+            chatLog.appendChild(branchDiv);
+            autoScroll(); // Ensure auto-scroll after displaying branch selection
+        }
+    
+        function branchSelected() {
+            const branch = document.getElementById('branch-dropdown').value;
+            if (branch) {
+                selectedOption = branch;
+                displayFurtherOptions();
+            }
+            autoScroll(); // Ensure auto-scroll after branch selection
+        }
+    
+        function displayFurtherOptions() {
+            const chatLog = document.getElementById('chat-log');
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'bot-message';
+            optionsDiv.innerHTML = `
+                <div>You selected "${selectedOption}". What would you like to know more about?</div>
+                <div class="options-container">
+                    <button onclick="sendQuery('Admission Procedure')">Admission Procedure</button>
+                    <button onclick="sendQuery('Academic Calendar')">Academic Calendar</button>
+                    <button onclick="sendQuery('Student Support Services')">Student Support Services</button>
+                    <button onclick="sendQuery('Faculty and Contact Information')">Faculty and Contact Information</button>
+                    <button onclick="sendQuery('FAQs')">FAQs</button>
+                </div>
+            `;
+            chatLog.appendChild(optionsDiv);
+            autoScroll(); // Ensure auto-scroll after displaying further options
+        }
+    
+        function sendQuery(query) {
+            appendMessage('user', query);
+            sendMessage(query);
+            autoScroll(); // Ensure auto-scroll after sending query
+        }
+    
+        window.onload = function() {
+            displayOptions();
+        };
+    </script>
+    
+</body>
+</html>
